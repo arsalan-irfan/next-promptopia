@@ -13,7 +13,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { BuiltInProviderType } from "next-auth/providers";
 const Nav = () => {
-   const isUserLoggedIn = true;
+   const { data: session } = useSession();
    const [providers, setProviders] = useState<Record<
       LiteralUnion<BuiltInProviderType, string>,
       ClientSafeProvider
@@ -40,7 +40,7 @@ const Nav = () => {
          </Link>
          {/* Desktop Nav */}
          <div className="sm:flex hidden">
-            {isUserLoggedIn ? (
+            {session?.user ? (
                <div className="flex gap-3 md:gap-5">
                   <Link href={"/create-prompt"} className="black_btn">
                      Create Post
@@ -54,7 +54,7 @@ const Nav = () => {
                   </button>
                   <Link href={"/profile"}>
                      <Image
-                        src={"/assets/images/logo.svg"}
+                        src={session.user.image ?? ""}
                         alt={"profile"}
                         width={37}
                         height={37}
@@ -80,10 +80,10 @@ const Nav = () => {
          </div>
          {/* Mobile Nav */}
          <div className="sm:hidden flex relative">
-            {isUserLoggedIn ? (
+            {session?.user ? (
                <div className="flex">
                   <Image
-                     src={"/assets/images/logo.svg"}
+                     src={session.user.image ?? ""}
                      alt={"profile"}
                      width={37}
                      height={37}
